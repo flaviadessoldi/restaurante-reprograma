@@ -17,14 +17,38 @@ fetch(`http://localhost:3000/comidas`)
                 <h5 class="mt-0"><strong>${prato.nome}</strong></h5>
                 ${prato.descricao}
               </div>`
+
               container.appendChild(mediaItem);
-        }
-        )
-    }
-    )
-    .catch((erro)=>{
-        console.log(erro)
-    })
+              const buttonDelete = document.createElement("button")
+              buttonDelete.textContent = "Remover"
+              buttonDelete.setAttribute("class", "btn btn-info")
+              buttonDelete.setAttribute("data-id", prato._id)
+              mediaItem.appendChild(buttonDelete)
+      
+              buttonDelete.addEventListener("click", () =>{
+                fetch(
+                  `http://localhost:3000/comidas/${prato._id}`,
+                  {
+                    method: 'DELETE',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }
+                ).then((response) => {
+                  console.log(response)
+                  if(response.status === 204) {
+                    window.location.reload()
+                  } else {
+                    window.alert("Deu erro ao deletar, sorry")
+                  }
+                })
+              })
+          })
+        })
+        .catch((erro)=>{
+          console.log(erro)
+        })
+      
 
     const botao = document.querySelector('#criar_comida_button')
     botao.addEventListener("click", criarComida)
